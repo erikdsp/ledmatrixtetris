@@ -9,7 +9,8 @@ Button buttonLeft(3);
 Button buttonRight(4);
 int x_pos;
 uint8_t selectedShape = 6;
-TetrisActiveBlock activeTetromino;
+TetrisActiveBlock activeTetromino(0);
+TetrisGrid grid;
 
 
 void setup() {
@@ -17,6 +18,8 @@ void setup() {
   pot.init();
   buttonLeft.init();
   buttonRight.init();
+  grid.add(shapes[1], { 0, 10 } );
+  grid.add(shapes[3], { 6, 10 } );
 }
 
 void loop() {
@@ -41,6 +44,7 @@ void loop() {
   activeTetromino.setPosition(x_pos, 0);
 
   activeTetromino.draw();
+  grid.draw();
 
 }
 

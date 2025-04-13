@@ -5,6 +5,21 @@ TetrisActiveBlock::TetrisActiveBlock()
     reset();
 }
 
+TetrisActiveBlock::TetrisActiveBlock(uint8_t shape) 
+{
+    reset(shape);
+}
+
+void TetrisActiveBlock::reset(){
+    reset(random(0, 6));
+}
+
+void TetrisActiveBlock::reset(uint8_t shape){
+    if (shape >= 0 && shape <= 6) {
+        m_shape = shapes[shape];
+    }
+}
+
 void TetrisActiveBlock::rotate(){
     Point temporaryShape[4];
     for (uint8_t i = 0 ; i < 4 ; ++i) {
@@ -26,20 +41,6 @@ void TetrisActiveBlock::rotate(){
     }
 }
 
-Point TetrisActiveBlock::rotatePoint(Point pixel) {
-    int x = pixel.x - m_shape.center.x;
-    int y = pixel.y - m_shape.center.y;
-}
-
-void TetrisActiveBlock::reset(){
-    reset(random(0, 6));
-}
-
-void TetrisActiveBlock::reset(uint8_t shape){
-    if (shape >= 0 && shape <= 6) {
-        m_shape = shapes[shape];
-    }
-}
 
 void TetrisActiveBlock::setPosition(uint8_t x, uint8_t y){
     m_position.x = x;
@@ -59,4 +60,33 @@ void TetrisActiveBlock::draw(){
 // for testing
 int TetrisActiveBlock::getShapeSize(){
     return m_shape.shapeSize;
+}
+
+
+
+
+void TetrisGrid::resetGrid(){
+
+}
+
+void TetrisGrid::add(TetrisShape shape, Point position){
+    for (Point p : shape.shape) {
+        float x = p.x + position.x;
+        float y = p.y + position.y;
+        // check that values are within the grid range
+        if (x >= 0 && x <= led_matrix_height - 1 
+            && y >= 0 && y <= led_matrix_width - 1) {
+                m_grid[static_cast<uint8_t>(x)][static_cast<uint8_t>(y)] = true;
+            }
+    }
+}
+
+void TetrisGrid::draw(){
+    for (uint8_t y = 0 ; y < led_matrix_width ; ++y) {
+        for (uint8_t x = 0 ; x < led_matrix_height ; ++x ) {
+            if (m_grid[x][y]) {
+                put_pixel_portrait(x, y, g_ontime);
+            }
+        }
+    }
 }
