@@ -1,15 +1,11 @@
 /**
- * @file Timer.h
+ * @file Tetris.h
  * @author Erik Dahl
- * @brief  Timer class to handle timing
- * @details  This class is used to handle timing tasks
- * It has methods to reset the timer, check if it is time to update and set the duration
- * Based on Timer co-written by John Collinder
+ * @brief  Tetris written for the Arduino UNO R4 Led Matrix
  * @version 0.1
  * @date 2025-04-13
  */
-
- #ifndef ARDUINO_LED_MATRIX_TETRIS_H
+#ifndef ARDUINO_LED_MATRIX_TETRIS_H
 #define ARDUINO_LED_MATRIX_TETRIS_H
 
 #include "Matrix.h"
@@ -46,12 +42,21 @@ class TetrisGrid {
 
 class TetrisActiveBlock {
     public:
+    TetrisActiveBlock();
+//    TetrisActiveBlock(TetrisGrid* grid);
     void rotate();
     void reset();
-    void updatePosition();
+    void reset(uint8_t shape);
+    void setPosition(uint8_t x, uint8_t y);
+    void advancePosition();
+    void draw();
+    // for testing purposes
+    int getShapeSize();
     private:
     TetrisShape m_shape;
     Point m_position;
+    TetrisGrid* m_grid;
+    Point rotatePoint(Point pixel);
 };
 
 

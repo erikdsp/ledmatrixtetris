@@ -6,32 +6,41 @@
 
 Potentiometer pot(A5, 0, 7);
 Button buttonLeft(3);
+Button buttonRight(4);
 int x_pos;
 uint8_t selectedShape = 6;
+TetrisActiveBlock activeTetromino;
 
 
 void setup() {
   Serial.begin(9600);
   pot.init();
   buttonLeft.init();
+  buttonRight.init();
 }
 
 void loop() {
-  int buttonPress = buttonLeft.getState();
+  int buttonLeftPress = buttonLeft.getState();
+  int buttonRightPress = buttonRight.getState();
   pot.readValue();
 
-  if (buttonPress) {
+  if (buttonLeftPress) {
+    activeTetromino.rotate();
+  }
+
+  if (buttonRightPress) {
     selectedShape++;
     if (selectedShape > 6) selectedShape = 0;
+    activeTetromino.reset(selectedShape);
   }
 
-  int max_pos = led_matrix_height - 1 - (shapes[selectedShape].shapeSize - 1);
+
+  int max_pos = led_matrix_height - 1 - (activeTetromino.getShapeSize() - 1);
   pot.setOutputRange(0, max_pos);
   x_pos = pot.getScaledValue();
+  activeTetromino.setPosition(x_pos, 0);
 
-  for (Point p : shapes[selectedShape].shape){
-    put_pixel_portrait(p.x + x_pos, p.y, g_ontime);
-  }
+  activeTetromino.draw();
 
 }
 
