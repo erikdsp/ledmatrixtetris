@@ -19,3 +19,9 @@ void put_pixel(uint8_t x, uint8_t y, uint32_t ontime)
     pinMode(h,INPUT);
   }
 }
+
+void put_pixel_portrait(uint8_t x, uint8_t y, uint32_t ontime){
+  uint8_t rotatedX = y;
+  uint8_t rotatedY = led_matrix_height - 1 - x;
+  put_pixel(rotatedX, rotatedY, ontime);
+}

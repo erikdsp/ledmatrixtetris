@@ -12,6 +12,7 @@
 #include "LedMatrixConstants.h"
 
 void put_pixel(uint8_t x, uint8_t y, uint32_t ontime);
+void put_pixel_portrait(uint8_t x, uint8_t y, uint32_t ontime);
 
 
 #endif
