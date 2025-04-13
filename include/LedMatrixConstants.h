@@ -16,11 +16,11 @@
 #include <Arduino.h>
 
 // LED matrix info.
-const uint8_t led_matrix_pin_first = 28;
-const uint8_t led_matrix_pin_last = 38;
-const uint8_t led_matrix_pin_count = led_matrix_pin_last - led_matrix_pin_first + 1;
-const uint8_t led_matrix_height = 8;
-const uint8_t led_matrix_width = 12;
+constexpr uint8_t led_matrix_pin_first = 28;
+constexpr uint8_t led_matrix_pin_last = 38;
+constexpr uint8_t led_matrix_pin_count = led_matrix_pin_last - led_matrix_pin_first + 1;
+constexpr uint8_t led_matrix_height = 8;
+constexpr uint8_t led_matrix_width = 12;
 
 // Pixel-to-pin translation table.
 // A HEX value encodes two pin numbers. The MSB is to be driven LOW,
@@ -31,7 +31,7 @@ const uint8_t led_matrix_width = 12;
 // Note that they all appear in pairs, so you could make the table 50%
 // smaller at the cost of doing some swapping for odd or even columns.
 // (0,0) is upper left corner when the board's USB connector points to the left.
-const uint8_t led_matrix_pins[led_matrix_height][led_matrix_width] =
+constexpr uint8_t led_matrix_pins[led_matrix_height][led_matrix_width] =
 {
   //  0     1     2     3     4     5     6     7     8     9    10     11
   { 0x37, 0x73, 0x47, 0x74, 0x43, 0x34, 0x87, 0x78, 0x83, 0x38, 0x84, 0x48 }, // 0
@@ -44,7 +44,7 @@ const uint8_t led_matrix_pins[led_matrix_height][led_matrix_width] =
   { 0xa5, 0x5a, 0xa1, 0x1a, 0xa2, 0x2a, 0x97, 0x79, 0x93, 0x39, 0x94, 0x49 }, // 7
 };
 
-const uint16_t g_ontime = 521;
+constexpr uint16_t g_ontime = 521;
 
 
 
