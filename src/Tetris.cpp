@@ -112,8 +112,10 @@ int TetrisActiveBlock::getShapeSize(){
 
 
 
-void TetrisGrid::resetGrid(){
-
+void TetrisGrid::clearGrid(){
+    for (int y = 0; y < 12; ++y) {
+        m_grid[y] = 0;
+    }    
 }
 
 void TetrisGrid::add(TetrisShape shape, Point position){
@@ -121,38 +123,47 @@ void TetrisGrid::add(TetrisShape shape, Point position){
         float x = p.x + position.x;
         float y = p.y + position.y;
         // check that values are within the grid range
-        if (x >= 0 && x <= led_matrix_height - 1 
-            && y >= 0 && y <= led_matrix_width - 1) {
-                m_grid[static_cast<uint8_t>(x)][static_cast<uint8_t>(y)] = true;
-            }
+        if (x >= 0 && x < 8 && y >= 0 && y < 12) {
+            addCellToGrid(static_cast<uint8_t>(x), static_cast<uint8_t>(y));
+        }
     }
 }
+
+void TetrisGrid::addCellToGrid(uint8_t x, uint8_t y){ 
+    // Example (1 << 2) would be 00000100 in binary  
+    m_grid[y] |= (1 << x); 
+}
+
+void TetrisGrid::removeCellFromGrid(uint8_t x, uint8_t y){
+    // Example ~(1 << 2) would be 11111011 in binary  
+    m_grid[y] &= ~(1 << x); 
+}
+
+
 
 void TetrisGrid::removeFilledLines(){
     // loop from the top
-    for (int y = 0 ; y < led_matrix_width ; ++y) {
-        bool isFilled = true;
-        for (int x = 0 ; x < led_matrix_height ; ++x ) {
-            if (!m_grid[x][y]) isFilled = false;
-        }
-        // any time a filled line is encountered move all above lines down
-        if (isFilled) {
-            for (int move_y = y ; move_y >= 0 ; --move_y ) {
-                for (int x = 0 ; x < led_matrix_height ; ++x ) {
-                    if (move_y > 0) {
-                        m_grid[x][move_y] = m_grid[x][move_y-1];
-                    } else { 
-                        m_grid[x][move_y] = false;
-                    }
-                }
-            }
+    for (int y = 0; y < 12; ++y) { 
+        // If a row is filled shift the above rows down
+        if (m_grid[y] == 255) { 
+            shiftLinesDown(y);
         }
     }
 }
 
+void TetrisGrid::shiftLinesDown(uint8_t filledLine) {
+    // Shift rows above the filled line downward
+    for (int y = filledLine; y > 0; --y) {
+        m_grid[y] = m_grid[y - 1]; // Move the row above to the current row
+    }
+    // Clear the top row
+    m_grid[0] = 0;
+}
+
+
 bool TetrisGrid::isFilled(uint8_t x, uint8_t y) {
-    if (x < led_matrix_height && y < led_matrix_width) {
-        return m_grid[x][y];
+    if (x < 8 && y < 12) {
+        return (m_grid[y] & (1 << x)) != 0;
     }
     return false;
 }
@@ -160,7 +171,7 @@ bool TetrisGrid::isFilled(uint8_t x, uint8_t y) {
 void TetrisGrid::draw(){
     for (uint8_t y = 0 ; y < led_matrix_width ; ++y) {
         for (uint8_t x = 0 ; x < led_matrix_height ; ++x ) {
-            if (m_grid[x][y]) {
+            if (isFilled(x, y)) {
                 put_pixel_portrait(x, y, g_ontime);
             }
         }

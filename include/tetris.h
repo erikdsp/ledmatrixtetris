@@ -34,13 +34,16 @@ constexpr TetrisShape shapes[7] = {
 
 class TetrisGrid {
     public:
-    void resetGrid();
+    void clearGrid();
     void add(TetrisShape shape, Point position);
     void removeFilledLines();
     void draw();
     bool isFilled(uint8_t x, uint8_t y);
     private:
-    bool m_grid[led_matrix_height][led_matrix_width];
+    uint8_t m_grid[12];
+    void addCellToGrid(uint8_t x, uint8_t y);
+    void removeCellFromGrid(uint8_t x, uint8_t y);
+    void shiftLinesDown(uint8_t filledLine);
 };
 
 class TetrisActiveBlock {
