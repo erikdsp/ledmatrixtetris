@@ -63,7 +63,7 @@ class TetrisActiveBlock {
     void setPosition(uint8_t x, uint8_t y);
     void setXPosition(int x);
     bool incrementYPosition();
-    void addToGrid();
+    bool addToGridAndResetShape();
     bool shapeIsColliding(Point position, Point shape[4]);
     bool shapeIsColliding(Point position);
     void draw();

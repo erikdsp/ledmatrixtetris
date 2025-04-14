@@ -99,12 +99,14 @@ bool TetrisActiveBlock::incrementYPosition(){
     }
 }
 
-void TetrisActiveBlock::addToGrid() {
+bool TetrisActiveBlock::addToGridAndResetShape() {
     m_grid->add(m_shape, m_position);
     m_grid->removeFilledLines();
     m_position.y = 0;
     resetShape();
-    // add collision check for GAME OVER
+    // if colliding Game Over
+    if (shapeIsColliding(m_position)) return false;
+    else return true;
 }
 
 bool TetrisActiveBlock::shapeIsColliding(Point position, Point shape[4]) {

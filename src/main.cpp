@@ -37,8 +37,19 @@ void loop() {
   if (g_tetrisTimer.timeToUpdate() || buttonRightPress) {
     bool incremented = activeTetromino.incrementYPosition();
     if (!incremented) {
-      activeTetromino.addToGrid();
+      bool playing = activeTetromino.addToGridAndResetShape();
       pot.setOutputRange(activeTetromino.getXRange());
+
+      if (!playing) {
+        // GAME OVER
+        g_tetrisTimer.setDuration(3000);
+        g_tetrisTimer.reset();
+        while (!g_tetrisTimer.timeToUpdate()) {
+          grid.draw();
+        }
+        g_tetrisTimer.setDuration(1000);
+        grid.clearGrid();
+      }
     }
     g_tetrisTimer.reset();
   }
