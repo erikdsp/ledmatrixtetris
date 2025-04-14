@@ -38,8 +38,8 @@ class TetrisGrid {
     void add(TetrisShape shape, Point position);
     void draw();
     bool isFilled(uint8_t x, uint8_t y);
-    bool m_grid[led_matrix_height][led_matrix_width];
     private:
+    bool m_grid[led_matrix_height][led_matrix_width];
 };
 
 class TetrisActiveBlock {
@@ -58,10 +58,10 @@ class TetrisActiveBlock {
     void draw();
     // for testing purposes
     int getShapeSize();
-    TetrisGrid* m_grid;
     private:
     TetrisShape m_shape;
     Point m_position;
+    TetrisGrid* m_grid;
 };
 
 

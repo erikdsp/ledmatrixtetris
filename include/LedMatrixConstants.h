@@ -44,7 +44,9 @@ constexpr uint8_t led_matrix_pins[led_matrix_height][led_matrix_width] =
   { 0xa5, 0x5a, 0xa1, 0x1a, 0xa2, 0x2a, 0x97, 0x79, 0x93, 0x39, 0x94, 0x49 }, // 7
 };
 
-constexpr uint16_t g_ontime = 521;
+// lower values works better when many pixels are active
+constexpr uint16_t g_ontime = 200;
+// constexpr uint16_t g_ontime = 521;
 
 
 

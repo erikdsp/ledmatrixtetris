@@ -11,7 +11,7 @@ TetrisActiveBlock::TetrisActiveBlock(uint8_t shape)
 }
 
 TetrisActiveBlock::TetrisActiveBlock(TetrisGrid* grid) 
-  : m_grid { grid } 
+  : m_grid { grid }, m_position { 3, 0 }
   {
     reset();
   }
@@ -64,7 +64,12 @@ void TetrisActiveBlock::incrementYPosition(){
     }
     else {
         // add to grid
+        m_grid->add(m_shape, m_position);
+        // reset y
+        m_position.y = 0;
         // reset shape
+        reset();
+        // add collision check for GAME OVER
     }
 }
 
