@@ -37,27 +37,31 @@ class TetrisGrid {
     void resetGrid();
     void add(TetrisShape shape, Point position);
     void draw();
-    private:
+    bool isFilled(uint8_t x, uint8_t y);
     bool m_grid[led_matrix_height][led_matrix_width];
+    private:
 };
 
 class TetrisActiveBlock {
     public:
     TetrisActiveBlock();
     TetrisActiveBlock(uint8_t shape);
-//    TetrisActiveBlock(TetrisGrid* grid);
+    TetrisActiveBlock(TetrisGrid* grid);
     void reset();
     void reset(uint8_t shape);
     void rotate();
     void setPosition(uint8_t x, uint8_t y);
-    void advancePosition();
+    void setXPosition(uint8_t x);
+    void incrementYPosition();
+    bool shapeIsColliding(Point position, Point shape[4]);
+    bool shapeIsColliding(Point position);
     void draw();
     // for testing purposes
     int getShapeSize();
+    TetrisGrid* m_grid;
     private:
     TetrisShape m_shape;
     Point m_position;
-    TetrisGrid* m_grid;
 };
 
 

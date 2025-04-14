@@ -9,8 +9,8 @@ Button buttonLeft(3);
 Button buttonRight(4);
 int x_pos;
 uint8_t selectedShape = 6;
-TetrisActiveBlock activeTetromino(0);
 TetrisGrid grid;
+TetrisActiveBlock activeTetromino(&grid);
 
 
 void setup() {
@@ -32,16 +32,18 @@ void loop() {
   }
 
   if (buttonRightPress) {
-    selectedShape++;
-    if (selectedShape > 6) selectedShape = 0;
-    activeTetromino.reset(selectedShape);
+    activeTetromino.incrementYPosition();
+    // selectedShape++;
+    // if (selectedShape > 6) selectedShape = 0;
+    // activeTetromino.reset(selectedShape);
+
   }
 
 
   int max_pos = led_matrix_height - 1 - (activeTetromino.getShapeSize() - 1);
   pot.setOutputRange(0, max_pos);
   x_pos = pot.getScaledValue();
-  activeTetromino.setPosition(x_pos, 0);
+  activeTetromino.setXPosition(x_pos);
 
   activeTetromino.draw();
   grid.draw();

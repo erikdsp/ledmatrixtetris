@@ -10,6 +10,12 @@ TetrisActiveBlock::TetrisActiveBlock(uint8_t shape)
     reset(shape);
 }
 
+TetrisActiveBlock::TetrisActiveBlock(TetrisGrid* grid) 
+  : m_grid { grid } 
+  {
+    reset();
+  }
+
 void TetrisActiveBlock::reset(){
     reset(random(0, 6));
 }
@@ -43,13 +49,47 @@ void TetrisActiveBlock::rotate(){
 
 
 void TetrisActiveBlock::setPosition(uint8_t x, uint8_t y){
+    // REMOVE when setXPosition is done
     m_position.x = x;
     m_position.y = y;
 }
 
-void TetrisActiveBlock::advancePosition(){
-
+void TetrisActiveBlock::setXPosition(uint8_t x){
+    // TODO: move step by step, checking for collision along the way
+    m_position.x = x;
 }
+void TetrisActiveBlock::incrementYPosition(){
+    if (!shapeIsColliding( { m_position.x, m_position.y + 1 } )) {
+       m_position.y++; 
+    }
+    else {
+        // add to grid
+        // reset shape
+    }
+}
+
+
+bool TetrisActiveBlock::shapeIsColliding(Point position, Point shape[4]) {
+    for (uint8_t i = 0 ; i < 4 ; ++i) {
+        // check if any point is below bottom of grid
+        if (shape[i].y + position.y >= led_matrix_width) {
+            return true;
+        }
+        // check if any point collides with grid
+        if (m_grid->isFilled(shape[i].x + position.x, shape[i].y + position.y)) {
+            return true;
+        }
+    }
+    // else return false
+    return false;
+}
+
+bool TetrisActiveBlock::shapeIsColliding(Point position) {
+    return shapeIsColliding(position, m_shape.shape);
+}
+
+
+
 
 void TetrisActiveBlock::draw(){
     for (Point p : m_shape.shape){
@@ -79,6 +119,14 @@ void TetrisGrid::add(TetrisShape shape, Point position){
                 m_grid[static_cast<uint8_t>(x)][static_cast<uint8_t>(y)] = true;
             }
     }
+}
+
+bool TetrisGrid::isFilled(uint8_t x, uint8_t y) {
+    if (x < led_matrix_height && y < led_matrix_width) {
+        return m_grid[x][y];
+    }
+    // add proper error handling
+    return false;
 }
 
 void TetrisGrid::draw(){
