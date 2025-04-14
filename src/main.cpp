@@ -2,6 +2,7 @@
 #include "Tetris.h"
 #include "Potentiometer.h"
 #include "Button.h"
+#include "Timer.h"
 #include <Arduino.h>
 
 Potentiometer pot(A5, 0, 7);
@@ -11,7 +12,7 @@ int x_pos;
 uint8_t selectedShape = 6;
 TetrisGrid grid;
 TetrisActiveBlock activeTetromino(&grid);
-
+Timer g_timer(1000);
 
 void setup() {
   Serial.begin(9600);
@@ -36,8 +37,12 @@ void loop() {
     // selectedShape++;
     // if (selectedShape > 6) selectedShape = 0;
     // activeTetromino.reset(selectedShape);
-
   }
+
+   if (g_timer.timeToUpdate()) {
+     // activeTetromino.incrementYPosition();
+     g_timer.reset();
+   }
 
 
   int max_pos = led_matrix_height - 1 - (activeTetromino.getShapeSize() - 1);

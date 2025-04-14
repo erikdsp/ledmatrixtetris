@@ -36,6 +36,7 @@ class TetrisGrid {
     public:
     void resetGrid();
     void add(TetrisShape shape, Point position);
+    void removeFilledLines();
     void draw();
     bool isFilled(uint8_t x, uint8_t y);
     private:

@@ -65,6 +65,8 @@ void TetrisActiveBlock::incrementYPosition(){
     else {
         // add to grid
         m_grid->add(m_shape, m_position);
+        // remove filled lines
+        m_grid->removeFilledLines();
         // reset y
         m_position.y = 0;
         // reset shape
@@ -126,11 +128,32 @@ void TetrisGrid::add(TetrisShape shape, Point position){
     }
 }
 
+void TetrisGrid::removeFilledLines(){
+    // loop from the top
+    for (int y = 0 ; y < led_matrix_width ; ++y) {
+        bool isFilled = true;
+        for (int x = 0 ; x < led_matrix_height ; ++x ) {
+            if (!m_grid[x][y]) isFilled = false;
+        }
+        // any time a filled line is encountered move all above lines down
+        if (isFilled) {
+            for (int move_y = y ; move_y >= 0 ; --move_y ) {
+                for (int x = 0 ; x < led_matrix_height ; ++x ) {
+                    if (move_y > 0) {
+                        m_grid[x][move_y] = m_grid[x][move_y-1];
+                    } else { 
+                        m_grid[x][move_y] = false;
+                    }
+                }
+            }
+        }
+    }
+}
+
 bool TetrisGrid::isFilled(uint8_t x, uint8_t y) {
     if (x < led_matrix_height && y < led_matrix_width) {
         return m_grid[x][y];
     }
-    // add proper error handling
     return false;
 }
 
