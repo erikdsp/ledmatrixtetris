@@ -40,6 +40,9 @@ void TetrisActiveBlock::rotate(){
         temporaryShape[i].y += m_shape.center.y;
     }
     // check for collisions
+    if (shapeIsColliding(m_position, temporaryShape)) {
+        return;
+    }
 
     // then update the m_shape variable
     for (uint8_t i = 0 ; i < 4 ; ++i) {
