@@ -2,25 +2,25 @@
 
 TetrisActiveBlock::TetrisActiveBlock() 
 {
-    reset();
+    resetShape();
 }
 
 TetrisActiveBlock::TetrisActiveBlock(uint8_t shape) 
 {
-    reset(shape);
+    resetShape(shape);
 }
 
 TetrisActiveBlock::TetrisActiveBlock(TetrisGrid* grid) 
   : m_grid { grid }, m_position { 3, 0 }
   {
-    reset();
+    resetShape();
   }
 
-void TetrisActiveBlock::reset(){
-    reset(random(0, 6));
+void TetrisActiveBlock::resetShape(){
+    resetShape(random(0, 6));
 }
 
-void TetrisActiveBlock::reset(uint8_t shape){
+void TetrisActiveBlock::resetShape(uint8_t shape){
     if (shape >= 0 && shape <= 6) {
         m_shape = shapes[shape];
     }
@@ -47,6 +47,17 @@ void TetrisActiveBlock::rotate(){
     }
 }
 
+Range TetrisActiveBlock::getXRange() {
+    int leftMostX = m_shape.shapeSize - 1;
+    int rightMostX = 0;
+    for (Point p : m_shape.shape) {
+        if (p.x < leftMostX) leftMostX = p.x;
+        if (p.x > rightMostX) rightMostX = p.x;
+    }
+    int min = -leftMostX;
+    int max = 7 - (m_shape.shapeSize - 1) + ( m_shape.shapeSize - 1 - rightMostX );
+    return { min, max };
+}
 
 void TetrisActiveBlock::setPosition(uint8_t x, uint8_t y){
     // REMOVE when setXPosition is done
@@ -58,23 +69,23 @@ void TetrisActiveBlock::setXPosition(uint8_t x){
     // TODO: move step by step, checking for collision along the way
     m_position.x = x;
 }
-void TetrisActiveBlock::incrementYPosition(){
+bool TetrisActiveBlock::incrementYPosition(){
     if (!shapeIsColliding( { m_position.x, m_position.y + 1 } )) {
-       m_position.y++; 
+       m_position.y++;
+       return true; 
     }
     else {
-        // add to grid
-        m_grid->add(m_shape, m_position);
-        // remove filled lines
-        m_grid->removeFilledLines();
-        // reset y
-        m_position.y = 0;
-        // reset shape
-        reset();
-        // add collision check for GAME OVER
+        return false;
     }
 }
 
+void TetrisActiveBlock::addToGrid() {
+    m_grid->add(m_shape, m_position);
+    m_grid->removeFilledLines();
+    m_position.y = 0;
+    resetShape();
+    // add collision check for GAME OVER
+}
 
 bool TetrisActiveBlock::shapeIsColliding(Point position, Point shape[4]) {
     for (uint8_t i = 0 ; i < 4 ; ++i) {

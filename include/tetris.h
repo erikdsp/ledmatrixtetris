@@ -16,6 +16,11 @@ struct Point {
     float y;
 };
 
+struct Range {
+    int min;
+    int max;
+};
+
 struct TetrisShape {
     Point shape[4];
     Point center;
@@ -51,12 +56,14 @@ class TetrisActiveBlock {
     TetrisActiveBlock();
     TetrisActiveBlock(uint8_t shape);
     TetrisActiveBlock(TetrisGrid* grid);
-    void reset();
-    void reset(uint8_t shape);
+    void resetShape();
+    void resetShape(uint8_t shape);
     void rotate();
+    Range getXRange();
     void setPosition(uint8_t x, uint8_t y);
     void setXPosition(uint8_t x);
-    void incrementYPosition();
+    bool incrementYPosition();
+    void addToGrid();
     bool shapeIsColliding(Point position, Point shape[4]);
     bool shapeIsColliding(Point position);
     void draw();
@@ -66,6 +73,7 @@ class TetrisActiveBlock {
     TetrisShape m_shape;
     Point m_position;
     TetrisGrid* m_grid;
+
 };
 
 

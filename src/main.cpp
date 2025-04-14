@@ -30,13 +30,17 @@ void loop() {
 
   if (buttonLeftPress) {
     activeTetromino.rotate();
+    Range XRange = activeTetromino.getXRange();
+    pot.setOutputRange(XRange.min, XRange.max);
   }
 
   if (buttonRightPress) {
-    activeTetromino.incrementYPosition();
-    // selectedShape++;
-    // if (selectedShape > 6) selectedShape = 0;
-    // activeTetromino.reset(selectedShape);
+    bool incremented = activeTetromino.incrementYPosition();
+    if (!incremented) {
+      activeTetromino.addToGrid();
+      Range XRange = activeTetromino.getXRange();
+      pot.setOutputRange(XRange.min, XRange.max);
+    }
   }
 
    if (g_timer.timeToUpdate()) {
@@ -45,8 +49,6 @@ void loop() {
    }
 
 
-  int max_pos = led_matrix_height - 1 - (activeTetromino.getShapeSize() - 1);
-  pot.setOutputRange(0, max_pos);
   x_pos = pot.getScaledValue();
   activeTetromino.setXPosition(x_pos);
 
