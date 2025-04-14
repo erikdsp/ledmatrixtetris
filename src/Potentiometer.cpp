@@ -17,6 +17,11 @@ void Potentiometer::setOutputRange(int minOutput, int maxOutput){
     m_maxOutput = maxOutput;
 }
 
+void Potentiometer::setOutputRange(Range outputRange) {
+    m_minOutput = outputRange.min;
+    m_maxOutput = outputRange.max;
+}
+
 int Potentiometer::getScaledValue() {
       // scale analog input to correct range for paddle control
       int scaledValue = map(m_potValueRaw, 0, 1023, m_minOutput, m_maxOutput);

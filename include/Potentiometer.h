@@ -1,5 +1,6 @@
 #ifndef ARDUINO_POTENTIMETER_H
 #define ARDUINO_POTENTIMETER_H
+#include "Tetris.h"
 #include <Arduino.h>
 
 class Potentiometer {
@@ -8,6 +9,7 @@ public:
     void init();
     void readValue();
     void setOutputRange(int minOutput, int maxOutput);
+    void setOutputRange(Range outputRange);
     int getScaledValue();
 private:
     uint8_t m_potPin;

@@ -68,10 +68,27 @@ void TetrisActiveBlock::setPosition(uint8_t x, uint8_t y){
     m_position.y = y;
 }
 
-void TetrisActiveBlock::setXPosition(uint8_t x){
-    // TODO: move step by step, checking for collision along the way
-    m_position.x = x;
+void TetrisActiveBlock::setXPosition(int x){
+    if (x > m_position.x) {
+        while (x > m_position.x) {
+            if (shapeIsColliding({m_position.x + 1, m_position.y })) {
+                return;
+            } else {
+                m_position.x++;
+            }
+        }
+    }
+    if (x < m_position.x) {
+        while (x < m_position.x) {
+            if (shapeIsColliding({m_position.x - 1, m_position.y })) {
+                return;
+            } else {
+                m_position.x--;
+            }
+        }
+    }
 }
+
 bool TetrisActiveBlock::incrementYPosition(){
     if (!shapeIsColliding( { m_position.x, m_position.y + 1 } )) {
        m_position.y++;
@@ -114,7 +131,12 @@ bool TetrisActiveBlock::shapeIsColliding(Point position) {
 
 void TetrisActiveBlock::draw(){
     for (Point p : m_shape.shape){
-        put_pixel_portrait(p.x + m_position.x, p.y + m_position.y, g_ontime);
+        float x = p.x + m_position.x;
+        float y = p.y + m_position.y;
+        // check that values are within the grid range
+        if (x >= 0 && x < 8 && y >= 0 && y < 12) {
+            put_pixel_portrait(x, y, g_ontime);
+        }
     }
 }
 

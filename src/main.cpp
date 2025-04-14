@@ -8,50 +8,54 @@
 Potentiometer pot(A5, 0, 7);
 Button buttonLeft(3);
 Button buttonRight(4);
-int x_pos;
-uint8_t selectedShape = 6;
 TetrisGrid grid;
 TetrisActiveBlock activeTetromino(&grid);
-Timer g_timer(1000);
+Timer g_tetrisTimer(1000);
+Timer g_speedTimer(20000);
 
 void setup() {
   Serial.begin(9600);
   pot.init();
   buttonLeft.init();
   buttonRight.init();
-  grid.add(shapes[1], { 0, 10 } );
-  grid.add(shapes[3], { 6, 10 } );
+  pot.setOutputRange(activeTetromino.getXRange());
 }
 
 void loop() {
+  // read values
   int buttonLeftPress = buttonLeft.getState();
   int buttonRightPress = buttonRight.getState();
   pot.readValue();
 
+  // rotation
   if (buttonLeftPress) {
     activeTetromino.rotate();
-    Range XRange = activeTetromino.getXRange();
-    pot.setOutputRange(XRange.min, XRange.max);
+    pot.setOutputRange(activeTetromino.getXRange());
   }
 
-  if (buttonRightPress) {
+  // y movement
+  if (g_tetrisTimer.timeToUpdate() || buttonRightPress) {
     bool incremented = activeTetromino.incrementYPosition();
     if (!incremented) {
       activeTetromino.addToGrid();
-      Range XRange = activeTetromino.getXRange();
-      pot.setOutputRange(XRange.min, XRange.max);
+      pot.setOutputRange(activeTetromino.getXRange());
     }
+    g_tetrisTimer.reset();
   }
 
-   if (g_timer.timeToUpdate()) {
-     // activeTetromino.incrementYPosition();
-     g_timer.reset();
-   }
+  // gradually increase speed
+  if (g_speedTimer.timeToUpdate()){
+    uint32_t oldDuration = g_tetrisTimer.getDuration();
+    if (oldDuration < 100) {
+      g_tetrisTimer.setDuration(oldDuration * 0.9);
+    }
+    g_speedTimer.reset();
+  }
 
+  // x movement
+  activeTetromino.setXPosition(pot.getScaledValue());
 
-  x_pos = pot.getScaledValue();
-  activeTetromino.setXPosition(x_pos);
-
+  // draw
   activeTetromino.draw();
   grid.draw();
 

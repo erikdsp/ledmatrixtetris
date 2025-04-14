@@ -61,7 +61,7 @@ class TetrisActiveBlock {
     void rotate();
     Range getXRange();
     void setPosition(uint8_t x, uint8_t y);
-    void setXPosition(uint8_t x);
+    void setXPosition(int x);
     bool incrementYPosition();
     void addToGrid();
     bool shapeIsColliding(Point position, Point shape[4]);

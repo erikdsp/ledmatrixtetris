@@ -56,6 +56,11 @@ public:
     {
         m_timerDuration = duration;
     }
+
+    uint32_t getDuration(){
+        return m_timerDuration;
+    }
+
 };
 
 
