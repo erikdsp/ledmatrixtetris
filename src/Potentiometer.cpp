@@ -28,3 +28,7 @@ int Potentiometer::getScaledValue() {
       scaledValue = constrain(scaledValue, m_minOutput, m_maxOutput);
       return scaledValue;
 }
+
+uint16_t Potentiometer::getRawValue(){
+    return m_potValueRaw;
+}

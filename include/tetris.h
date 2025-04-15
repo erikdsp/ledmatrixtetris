@@ -11,9 +11,14 @@
 #include "Matrix.h"
 #include <Arduino.h>
 
-struct Point {
+struct FloatPoint {
     float x;
     float y;
+};
+
+struct IntPoint {
+    int x;
+    int y;
 };
 
 struct Range {
@@ -22,8 +27,8 @@ struct Range {
 };
 
 struct TetrisShape {
-    Point shape[4];
-    Point center;
+    FloatPoint shape[4];
+    FloatPoint center;
     int shapeSize;
 };
 
@@ -40,7 +45,7 @@ constexpr TetrisShape shapes[7] = {
 class TetrisGrid {
     public:
     void clearGrid();
-    void add(TetrisShape shape, Point position);
+    void add(TetrisShape shape, IntPoint position);
     void removeFilledLines();
     void draw();
     bool isFilled(uint8_t x, uint8_t y);
@@ -64,14 +69,14 @@ class TetrisActiveBlock {
     void setXPosition(int x);
     bool incrementYPosition();
     bool addToGridAndResetShape();
-    bool shapeIsColliding(Point position, Point shape[4]);
-    bool shapeIsColliding(Point position);
+    bool shapeIsColliding(IntPoint position, FloatPoint shape[4]);
+    bool shapeIsColliding(IntPoint position);
     void draw();
     // for testing purposes
     int getShapeSize();
     private:
     TetrisShape m_shape;
-    Point m_position;
+    IntPoint m_position;
     TetrisGrid* m_grid;
 
 };

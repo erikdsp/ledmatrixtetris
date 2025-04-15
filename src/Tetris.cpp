@@ -27,7 +27,7 @@ void TetrisActiveBlock::resetShape(uint8_t shape){
 }
 
 void TetrisActiveBlock::rotate(){
-    Point temporaryShape[4];
+    FloatPoint temporaryShape[4];
     for (uint8_t i = 0 ; i < 4 ; ++i) {
         // translate to center position
         float x = m_shape.shape[i].x - m_shape.center.x;
@@ -53,7 +53,7 @@ void TetrisActiveBlock::rotate(){
 Range TetrisActiveBlock::getXRange() {
     int leftMostX = m_shape.shapeSize - 1;
     int rightMostX = 0;
-    for (Point p : m_shape.shape) {
+    for (FloatPoint p : m_shape.shape) {
         if (p.x < leftMostX) leftMostX = p.x;
         if (p.x > rightMostX) rightMostX = p.x;
     }
@@ -109,7 +109,7 @@ bool TetrisActiveBlock::addToGridAndResetShape() {
     else return true;
 }
 
-bool TetrisActiveBlock::shapeIsColliding(Point position, Point shape[4]) {
+bool TetrisActiveBlock::shapeIsColliding(IntPoint position, FloatPoint shape[4]) {
     for (uint8_t i = 0 ; i < 4 ; ++i) {
         // check if any point is below bottom of grid
         if (shape[i].y + position.y >= led_matrix_width) {
@@ -124,7 +124,7 @@ bool TetrisActiveBlock::shapeIsColliding(Point position, Point shape[4]) {
     return false;
 }
 
-bool TetrisActiveBlock::shapeIsColliding(Point position) {
+bool TetrisActiveBlock::shapeIsColliding(IntPoint position) {
     return shapeIsColliding(position, m_shape.shape);
 }
 
@@ -132,7 +132,7 @@ bool TetrisActiveBlock::shapeIsColliding(Point position) {
 
 
 void TetrisActiveBlock::draw(){
-    for (Point p : m_shape.shape){
+    for (FloatPoint p : m_shape.shape){
         float x = p.x + m_position.x;
         float y = p.y + m_position.y;
         // check that values are within the grid range
@@ -156,8 +156,8 @@ void TetrisGrid::clearGrid(){
     }    
 }
 
-void TetrisGrid::add(TetrisShape shape, Point position){
-    for (Point p : shape.shape) {
+void TetrisGrid::add(TetrisShape shape, IntPoint position){
+    for (FloatPoint p : shape.shape) {
         float x = p.x + position.x;
         float y = p.y + position.y;
         // check that values are within the grid range

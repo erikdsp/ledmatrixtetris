@@ -11,6 +11,7 @@ public:
     void setOutputRange(int minOutput, int maxOutput);
     void setOutputRange(Range outputRange);
     int getScaledValue();
+    uint16_t getRawValue();
 private:
     uint8_t m_potPin;
     uint16_t m_potValueRaw;
