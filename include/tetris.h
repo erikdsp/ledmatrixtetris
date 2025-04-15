@@ -43,13 +43,13 @@ constexpr TetrisShape shapes[7] = {
 }; 
 
 class TetrisGrid {
-    public:
+public:
     void clearGrid();
     void add(TetrisShape shape, IntPoint position);
     void removeFilledLines();
     void draw();
     bool isFilled(uint8_t x, uint8_t y);
-    private:
+private:
     uint8_t m_grid[12];
     void addCellToGrid(uint8_t x, uint8_t y);
     void removeCellFromGrid(uint8_t x, uint8_t y);
@@ -57,28 +57,22 @@ class TetrisGrid {
 };
 
 class TetrisActiveBlock {
-    public:
-    TetrisActiveBlock();
-    TetrisActiveBlock(uint8_t shape);
+public:
     TetrisActiveBlock(TetrisGrid* grid);
-    void resetShape();
-    void resetShape(uint8_t shape);
     void rotate();
     Range getXRange();
-    void setPosition(uint8_t x, uint8_t y);
     void setXPosition(int x);
     bool incrementYPosition();
     bool addToGridAndResetShape();
-    bool shapeIsColliding(IntPoint position, FloatPoint shape[4]);
-    bool shapeIsColliding(IntPoint position);
     void draw();
-    // for testing purposes
-    int getShapeSize();
-    private:
+private:
     TetrisShape m_shape;
     IntPoint m_position;
     TetrisGrid* m_grid;
-
+    void resetShape();
+    void resetShape(uint8_t shape);
+    bool shapeIsColliding(IntPoint position, FloatPoint shape[4]);
+    bool shapeIsColliding(IntPoint position);
 };
 
 

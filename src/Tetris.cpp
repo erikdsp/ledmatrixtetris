@@ -1,14 +1,9 @@
 #include "Tetris.h"
 
-TetrisActiveBlock::TetrisActiveBlock() 
-{
-    resetShape();
-}
-
-TetrisActiveBlock::TetrisActiveBlock(uint8_t shape) 
-{
-    resetShape(shape);
-}
+/**
+ * @brief Tetris Active Block implementation 
+ * 
+ */
 
 TetrisActiveBlock::TetrisActiveBlock(TetrisGrid* grid) 
   : m_grid { grid }, m_position { 3, 0 }
@@ -62,11 +57,6 @@ Range TetrisActiveBlock::getXRange() {
     return { min, max };
 }
 
-void TetrisActiveBlock::setPosition(uint8_t x, uint8_t y){
-    // REMOVE when setXPosition is done
-    m_position.x = x;
-    m_position.y = y;
-}
 
 void TetrisActiveBlock::setXPosition(int x){
     if (x > m_position.x) {
@@ -129,8 +119,6 @@ bool TetrisActiveBlock::shapeIsColliding(IntPoint position) {
 }
 
 
-
-
 void TetrisActiveBlock::draw(){
     for (FloatPoint p : m_shape.shape){
         float x = p.x + m_position.x;
@@ -142,13 +130,11 @@ void TetrisActiveBlock::draw(){
     }
 }
 
-// for testing
-int TetrisActiveBlock::getShapeSize(){
-    return m_shape.shapeSize;
-}
 
-
-
+/**
+ * @brief Tetris Grid implementation 
+ * 
+ */
 
 void TetrisGrid::clearGrid(){
     for (int y = 0; y < 12; ++y) {
