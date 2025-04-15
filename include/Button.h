@@ -9,7 +9,6 @@
 #define __IOT_BUTTON_CLASS_HPP__
 
 #include <Arduino.h>
-// #include "Pin.hpp"
 
 enum ButtonState
 {

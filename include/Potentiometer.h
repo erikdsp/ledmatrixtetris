@@ -1,3 +1,13 @@
+/**
+ * @file Potentiometer.h
+ * @author Erik Dahl (erik@iunderlandet.se)
+ * @brief Easy Arduino Potentiometer reading and scaling
+ * @version 0.1
+ * @date 2025-04-15
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 #ifndef ARDUINO_POTENTIMETER_H
 #define ARDUINO_POTENTIMETER_H
 #include "Tetris.h"
