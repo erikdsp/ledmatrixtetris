@@ -18,7 +18,7 @@ class Timer
 private:
     uint32_t m_timerDuration;
     uint32_t m_lastUpdate;
-
+    bool m_paused { false };
 public:
 
     /**
@@ -36,7 +36,8 @@ public:
      */
     void reset()
     {
-        m_lastUpdate = millis();
+        if (!m_paused) m_lastUpdate = millis();
+        else m_lastUpdate = 0;
     }
     /**
      * @brief  Check if it is time to update
@@ -45,7 +46,8 @@ public:
      */
     bool timeToUpdate()
     {
-        return (millis() - m_lastUpdate > m_timerDuration);
+        if (m_paused) return false;
+        else return (millis() - m_lastUpdate > m_timerDuration);
     }
 
     /**
@@ -59,6 +61,22 @@ public:
 
     uint32_t getDuration(){
         return m_timerDuration;
+    }
+
+    void pause(){
+        if (!m_paused) {
+            m_paused = true;
+            // save the current count since m_lastUpdate
+            m_lastUpdate = millis() - m_lastUpdate;
+        }
+    }
+
+    void resume(){
+        if (m_paused){
+            m_paused = false;
+            // reset m_lastUpdate to current count relative to m_timerDuration
+            m_lastUpdate = millis() - (m_timerDuration - m_lastUpdate);
+        }
     }
 
 };
