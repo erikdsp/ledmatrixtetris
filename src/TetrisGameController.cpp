@@ -22,15 +22,15 @@ void TetrisGameController::getInput(){
 
 void TetrisGameController::updateGameState(){
     if (m_pauseGame) {
-        if (m_buttonRightPress) {
+        if (m_buttonRightPress || m_buttonLeftPress) {
             this->resume();
         }
       } else {
-        if (m_buttonRightPress == LONGPRESS) {
+        if (m_buttonLeftPress == LONGPRESS) {
             this->pause();
         }
   
-        if (m_buttonLeftPress) {
+        if (m_buttonLeftPress == SHORTPRESS) {
             this->rotate();
         }      
         
