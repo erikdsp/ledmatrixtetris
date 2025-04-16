@@ -9,7 +9,10 @@ void Potentiometer::init(){
 
 void Potentiometer::readValue() {
     // read raw value
-    m_potValueRaw = analogRead(m_potPin);
+    if (millis() - m_lastPressTime > m_debounceTime) {
+        m_potValueRaw = analogRead(m_potPin);
+        m_lastPressTime = millis();
+    }
 }
 
 void Potentiometer::setOutputRange(int minOutput, int maxOutput){

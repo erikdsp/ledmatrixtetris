@@ -27,6 +27,8 @@ private:
     uint16_t m_potValueRaw;
     int m_minOutput;
     int m_maxOutput;
+    const time_t m_debounceTime{ 50 };
+    time_t m_lastPressTime{ 0 };
 };
 
 
